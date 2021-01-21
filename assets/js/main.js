@@ -29,6 +29,16 @@
 
 // Ticketmaster API search function
 // -----------------------
+let queryURL1= "https://app.ticketmaster.com/discovery/v2/events.json?apikey=2wklXXwfJkLzbYFxIvoGSwhehNloF33O&classificationName=music&dmaId=701&startDateTime=2021-02-14T02:30:00Z`"
+
+$.ajax({
+  url: queryURL1,
+  method: "GET"
+}).then(function(res){
+  console.log(res);
+})
+
+
 
 // Spotify API artist search function
 // -----------------------
