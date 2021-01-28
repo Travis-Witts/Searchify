@@ -10,14 +10,18 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
   </head>
   <body>
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-      <div class="navbar-brand">
-        <a href="" class="navbar-item">Back</a>
-        <h3 class="navbar-item" href="">
-          Event Search
-        </h3>
+    <nav class="level is-mobile" >
+      <div class="level-item">
+        <a class="link is-info">Home</a>
+      </div>
+      <div class="level-item">
+        <a class="link is-info">LOGO</a>
+      </div>
+      <div class="level-item">
+        <a class="link is-info">Saved Event</a>
       </div>
     </nav>
+    
     <section class="hero is-light search-panel">
       <div class="hero-body">
           <div class="columns is-mobile is-centered">
@@ -125,10 +129,13 @@
                   <div class="date-month has-text-centered has-text-weight-bold"></div>
                   <div class="date-day has-text-centered"></div>
               </div>
-              <div class="event-info column is-mobile is size-5">
+              <div class="event-info column is-mobile is-size-5">
                   <div class="week-day"></div>
                   <div class="event-artist has-text-weight-bold"></div>
                   <div class="venue-location"></div>
+              </div>
+              <div class="column is-one-fifth">
+                <button class="button is-info is-rounded">See details</button>
               </div>
           </div>
       </div>

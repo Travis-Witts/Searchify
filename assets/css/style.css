@@ -1,8 +1,4 @@
 
-body {
-    background-color: grey;
-}
-
 * {
     box-sizing: border-box;
 }
@@ -33,3 +29,4 @@ img{
 .featured-events{
     background-color:brown;
 }
+
