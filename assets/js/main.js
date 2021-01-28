@@ -1,6 +1,6 @@
 // Define global variables
 // =======================
-
+const eventArray = ["1AKZAJ3GkdtJ6Bi", "1AvGZp9GkBqesc5"]
 // =======================
 
 // UI Functions
@@ -29,15 +29,6 @@
 
 // Ticketmaster API search function
 // -----------------------
-let queryURL1= "https://app.ticketmaster.com/discovery/v2/events.json?apikey=2wklXXwfJkLzbYFxIvoGSwhehNloF33O&classificationName=music&dmaId=701&startDateTime=2021-02-14T02:30:00Z`"
-
-$.ajax({
-  url: queryURL1,
-  method: "GET"
-}).then(function(res){
-  console.log(res);
-})
-
 
 
 // Spotify API artist search function
@@ -107,59 +98,114 @@ async function spotifyGetArtistService(name) {
 // renderInitialPage
 
 $("#searchButton").on("click", searchEvent);
-function searchEvent(){
-    let queryURLBase= "https://app.ticketmaster.com/discovery/v2/events.json?apikey=2wklXXwfJkLzbYFxIvoGSwhehNloF33O&classificationName=music&dmaId=701&sort=date,asc";
-    let queryURL = queryURLBase;
-    let keyword = $("#keyword").val();
-    let startDateTime = $("#startDate").val();
-    let endDateTime = $("#endDate").val();
-    
-    if(startDateTime){
-        startDateTime = startDateTime+"T00:00:00Z";
-        queryURL = queryURL.concat("&startDateTime="+startDateTime);
-    }else
+function searchEvent() {
+  let queryURLBase = "https://app.ticketmaster.com/discovery/v2/events.json?apikey=2wklXXwfJkLzbYFxIvoGSwhehNloF33O&classificationName=music&dmaId=701&sort=date,asc";
+  let queryURL = queryURLBase;
+  let keyword = $("#keyword").val();
+  let startDateTime = $("#startDate").val();
+  let endDateTime = $("#endDate").val();
 
-    if(endDateTime){
-        endDateTime = endDateTime+"T00:00:00Z";
-        queryURL = queryURL.concat("&endDateTime="+endDateTime);
+  if (startDateTime) {
+    startDateTime = startDateTime + "T00:00:00Z";
+    queryURL = queryURL.concat("&startDateTime=" + startDateTime);
+  } else
+
+    if (endDateTime) {
+      endDateTime = endDateTime + "T00:00:00Z";
+      queryURL = queryURL.concat("&endDateTime=" + endDateTime);
     }
-    if(keyword){
-        queryURL = queryURL.concat("&keyword="+keyword);
-    }else {
-        return null
-    }
-    console.log(queryURL)
-    
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-    }).then(function(res){
-        console.log(res);
-        let events = res._embedded.events;
-        let cardCopy = $(".search-results").find(".content").clone()
-        $(".search-results").find(".content").remove();
-        $(".eventNumber").text(events.length+" Events")
-        events.forEach(function(e, i){
-            console.log(cardCopy);
-            let newContent = cardCopy.clone();
-            let name = e.name;
-            let location = e._embedded.venues[0].name;
-            let localDate = e.dates.start.localDate;
-            let city = e.dates.timezone.split("/")[1];
-            let date = moment(localDate, 'YYYY/MM/DD').date();
-            let month= moment(localDate, 'YYYY/MM/DD').format("MMM");
-            let time = e.dates.start.localTime? moment(e.dates.start.localTime, "HH:mm:ss").format("hh:mm A"):"TBD";
-            let day = moment(localDate, 'YYYY/MM/DD').format("ddd");
-            console.log(name,location,city,date, day, time, month);
-            
-            newContent.find(".date-month").text(month);
-            newContent.find(".date-day").text(date);
-            newContent.find(".week-day").text(`${day} - ${time}`);
-            newContent.find(".event-artist").text(name);
-            newContent.find(".venue-location").text(`${location} - ${city}`);
+  if (keyword) {
+    queryURL = queryURL.concat("&city=" + keyword);
+  } else {
+    return null
+  }
+  console.log(queryURL)
 
-            $(".search-results").append(newContent);
-        })
+  $.ajax({
+    url: queryURL,
+    method: "GET"
+  }).then(function (res) {
+    console.log(res)
+    let events = res._embedded.events;
+    var outer =$(".outer-card").empty();
+    outer.append($("<header>").addClass("card-header").append($("<p>").addClass("card-header-title").text("Upcoming Events")));
+    outer.append($("<div>").addClass("card-content box").append($("<p>").addClass("Country is-size-4 has-text-weight-bold").text(keyword)).append($("<p>").addClass("eventNumber is-size-6 has-text-weight-medium").text("Events")));
+    outer.append($("<div>").addClass("card-content search-results"));
+    $(".eventNumber").text(events.length + " Events")
+    events.forEach(function (e, i) {
+      let card = $("<div>").addClass("content box columns is-mobile");
+      let eventDate = $("<div>").addClass("eventDate column is-one-fifth is-size-4");
+      let eventInfo = $("<div>").addClass("event-info column is-mobile is-size-5");
+      let eventBTN = $("<div>").addClass("column is-one-fifth").append($("<button>").addClass("button is-info is-rounded").text("See Details"))
+      eventDate.append($("<div>").addClass("date-month has-text-centered has-text-weight-bold")).append($("<div>").addClass("date-day has-text-centered"));
+      eventInfo.append($("<div>").addClass("week-day")).append($("<div>").addClass("event-artist has-text-weight-bold")).append($("<div>").addClass("venue-location"));
 
+      card.append(eventDate);
+      card.append(eventInfo);
+      card.append(eventBTN)
+      let newContent = card;
+      let name = e.name;
+      let location = e._embedded.venues[0].name;
+      let localDate = e.dates.start.localDate;
+      let date = moment(localDate, 'YYYY/MM/DD').date();
+      let month = moment(localDate, 'YYYY/MM/DD').format("MMM");
+      let time = e.dates.start.localTime ? moment(e.dates.start.localTime, "HH:mm:ss").format("hh:mm A") : "TBD";
+      let day = moment(localDate, 'YYYY/MM/DD').format("ddd")
+
+      newContent.find(".date-month").text(month);
+      newContent.find(".date-day").text(date);
+      newContent.find(".week-day").text(`${day} - ${time}`);
+      newContent.find(".event-artist").text(name);
+      newContent.find(".venue-location").text(`${location}`);
+
+      $(".search-results").append(newContent);
     })
+
+  })
 }
+
+$("#savedButton").on("click", savedEvents);
+function savedEvents() {
+  $(".hero-body").empty();
+  $(".card-content").empty();
+  $(".card-header-title").text("");
+  for (i = 0; i < eventArray.length; i++) {
+    let queryURL = "https://app.ticketmaster.com/discovery/v2/events/" + eventArray[i] + ".json?apikey=2wklXXwfJkLzbYFxIvoGSwhehNloF33O";
+
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    }).then(function (res) {
+      console.log(res)
+      let event = res;
+      $(".eventNumber").text(eventArray.length + " Events")
+        let card = $("<div>").addClass("content box columns is-mobile");
+        let eventDate = $("<div>").addClass("eventDate column is-one-fifth is-size-4");
+        let eventInfo = $("<div>").addClass("event-info column is-mobile is-size-5");
+        let eventBTN = $("<div>").addClass("column is-one-fifth").append($("<button>").addClass("button is-info is-rounded").text("See Details"))
+        eventDate.append($("<div>").addClass("date-month has-text-centered has-text-weight-bold")).append($("<div>").addClass("date-day has-text-centered"));
+        eventInfo.append($("<div>").addClass("week-day")).append($("<div>").addClass("event-artist has-text-weight-bold")).append($("<div>").addClass("venue-location"));
+
+        card.append(eventDate);
+        card.append(eventInfo);
+        card.append(eventBTN)
+        let newContent = card;
+        let name = event.name;
+        let location = event._embedded.venues[0].name;
+        let localDate = event.dates.start.localDate;
+        let date = moment(localDate, 'YYYY/MM/DD').date();
+        let month = moment(localDate, 'YYYY/MM/DD').format("MMM");
+        let time = event.dates.start.localTime ? moment(event.dates.start.localTime, "HH:mm:ss").format("hh:mm A") : "TBD";
+        let day = moment(localDate, 'YYYY/MM/DD').format("ddd")
+
+        newContent.find(".date-month").text(month);
+        newContent.find(".date-day").text(date);
+        newContent.find(".week-day").text(`${day} - ${time}`);
+        newContent.find(".event-artist").text(name);
+        newContent.find(".venue-location").text(`${location}`);
+
+        $(".hero-body").append(newContent);
+      })
+
+    }
+  }
