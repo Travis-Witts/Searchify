@@ -108,7 +108,7 @@ function searchEvent() {
   if (startDateTime) {
     startDateTime = startDateTime + "T00:00:00Z";
     queryURL = queryURL.concat("&startDateTime=" + startDateTime);
-  } else
+  }
 
     if (endDateTime) {
       endDateTime = endDateTime + "T00:00:00Z";
