@@ -2,3 +2,34 @@
 body {
     background-color: grey;
 }
+
+* {
+    box-sizing: border-box;
+}
+
+.search-panel{
+    height: 100vh;
+}
+
+img{
+    width: 60%;
+}
+
+.saved-event{
+    position: relative;
+}
+.savedEvent-date{
+    position: absolute;
+    top: 10px;
+    left: 20px;
+}
+.info{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.featured-events{
+    background-color:brown;
+}
