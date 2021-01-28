@@ -42,6 +42,71 @@ function renderCard(event) {
 }
 // -----------------------
 
+// Display Nav Bar
+function renderNav() {
+  let navBar =`
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a href="" class="navbar-item">Back</a>
+    <h3 class="navbar-item" href="">
+      Event Search
+    </h3>
+  </div>
+</nav>
+  `
+  $("body").append(navBar);
+}
+
+// -----------------------
+
+// Display search
+function renderSearch() {
+  let searchPanel = `
+  <section class="hero is-light search-panel">
+  <div class="hero-body">
+    <div class="columns is-mobile is-centered">
+      <h1 class="title is-1 has-text-centered">Meet your favorite artists</h1>
+    </div>
+    <div class="field">
+      <div class="field">
+        <div class="control columns is-mobile is-centered">
+          <div class="search-bar column is-two-thirds is-half-tablet">
+            <div class="control has-icons-left has-icons-right">
+              <input class="input is-rounded is-large" type="text" placeholder="Search" id="keyword">
+              <span class="icon is-small is-right">
+                <i class="fas fa-search"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="field is-grouped is-grouped-multiline columns is-mobile is-centered">
+        <div class="control">
+          <label class="label">Start Date</label>
+          <div class="control">
+            <input class="input" type="date" id="startDate">
+          </div>
+        </div>
+        <div class="control">
+          <label class="label">End Date</label>
+          <div class="control">
+            <input class="input" type="date" id="endDate">
+          </div>
+        </div>
+      </div>
+      <div class="columns is-mobile is-centered">
+        <button class="button is-rounded" id="searchButton">Search</button>
+      </div>
+      <div class="columns is-mobile is-centered">
+        <button class="button is-rounded" id="savedButton">Saved Events</button>
+      </div>
+    </div>
+  </div>
+</section>
+  `
+  $("body").append(searchPanel);
+}
+// -----------------------
 // Display Event Details
 // -----------------------
 
@@ -127,6 +192,8 @@ async function spotifyGetArtistService(name) {
 // spotifyGetArtistService();
 
 // renderInitialPage
+renderNav();
+renderSearch();
 
 $("#searchButton").on("click", searchEvent);
   function searchEvent() {
@@ -156,17 +223,19 @@ $("#searchButton").on("click", searchEvent);
       let events = await res._embedded.events;
       $(".outer-card").empty();
       var eventsHeader = `
-      <header class="card-header">
-      <p class="card-header-title">Upcoming Events</p>
-    </header>
-    <div class="card-content box">
-      <p class="country is-size-4 has-text-weight-bold">${cityName}</p>
-      <p class="eventNumber is-size-6 has-text-weight-medium">
-          ${events.length} Events
-      </p>
-    </div>
+      <div class="card outer-card column is-tablet">
+        <header class="card-header">
+        <p class="card-header-title">Upcoming Events</p>
+        </header>
+        <div class="card-content box">
+          <p class="country is-size-4 has-text-weight-bold">${cityName}</p>
+          <p class="eventNumber is-size-6 has-text-weight-medium">
+            ${events.length} Events
+          </p>
+        </div>
+      </div>
       `
-      $(".outer-card").append(eventsHeader);
+      $("body").append(eventsHeader);
       for (i = 0; i < events.length; i++) {
         var eventObj = renderCard(events[i]);
         $(".outer-card").append(eventObj);
@@ -176,20 +245,24 @@ $("#searchButton").on("click", searchEvent);
 
   $("#savedButton").on("click", savedEvents);
   function savedEvents() {
-    $(".hero-body").empty();
-    $(".card-content").empty();
-    $(".outer-card").empty();
+    $("body").empty();
+    renderNav();
     var savedHeader = `
-    <header class="card-header">
-    <p class="card-header-title">Upcoming Events</p>
-  </header>
-  <div class="card-content box">
-    <p class="country is-size-4 has-text-weight-bold">Saved</p>
-    <p class="eventNumber is-size-6 has-text-weight-medium">
-        ${eventArray.length} Events
-    </p>
-  </div>
+    <section class="hero is-light search-panel">
+      <div class="hero-body">
+        <header class="card-header">
+          <p class="card-header-title">Saved Events</p>
+        </header>
+        <div class="card-content box">
+          <p class="country is-size-4 has-text-weight-bold">Saved</p>
+          <p class="eventNumber is-size-6 has-text-weight-medium">
+          ${eventArray.length} Events
+          </p>
+        </div>
+      </div>
+    </section>
     `
+    $("body").append(savedHeader);
     for (i = 0; i < eventArray.length; i++) {
       let queryURL = "https://app.ticketmaster.com/discovery/v2/events/" + eventArray[i] + ".json?apikey=2wklXXwfJkLzbYFxIvoGSwhehNloF33O";
 
@@ -197,9 +270,9 @@ $("#searchButton").on("click", searchEvent);
         url: queryURL,
         method: "GET"
       }).then(async function (res) {
-        console.log(res)
-        var response = await res.dates
-        var savedObj = renderCard(res)
+        console.log(res);
+        var response = await res.dates;
+        var savedObj = renderCard(res);
         $(".hero-body").append(savedObj);
       })
 
