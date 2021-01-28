@@ -124,7 +124,7 @@ function searchEvent(){
         queryURL = queryURL.concat("&endDateTime="+endDateTime);
     }
     if(keyword){
-        queryURL = queryURL.concat("&keyword="+keyword);
+        queryURL = queryURL.concat("&city="+keyword);
     }else {
         return null
     }
@@ -134,14 +134,18 @@ function searchEvent(){
         url: queryURL,
         method: "GET"
     }).then(function(res){
-        console.log(res);
         let events = res._embedded.events;
-        let cardCopy = $(".search-results").find(".content").clone()
-        $(".search-results").find(".content").remove();
+        $(".search-results").empty();
         $(".eventNumber").text(events.length+" Events")
         events.forEach(function(e, i){
-            console.log(cardCopy);
-            let newContent = cardCopy.clone();
+          let card = $("<div>").addClass("content box columns is-mobile");
+          let eventDate = $("<div>").addClass("eventDate column is-one-fifth is-size-4");
+          let eventInfo = $("<div>").addClass("event-info column is-mobile is-size-5");
+          eventDate.append($("<div>").addClass("date-month has-text-centered has-text-weight-bold").append($("<div>").addClass("date-day has-text-centered")));
+          eventInfo.append($("<div>").addClass("week-day")).append($("<div>").addClass("event-artist has-text-weight-bold")).append($("<div>").addClass("venue-location"));
+          card.append(eventDate);
+          card.append(eventInfo);
+            let newContent = card;
             let name = e.name;
             let location = e._embedded.venues[0].name;
             let localDate = e.dates.start.localDate;
@@ -149,8 +153,7 @@ function searchEvent(){
             let date = moment(localDate, 'YYYY/MM/DD').date();
             let month= moment(localDate, 'YYYY/MM/DD').format("MMM");
             let time = e.dates.start.localTime? moment(e.dates.start.localTime, "HH:mm:ss").format("hh:mm A"):"TBD";
-            let day = moment(localDate, 'YYYY/MM/DD').format("ddd");
-            console.log(name,location,city,date, day, time, month);
+            let day = moment(localDate, 'YYYY/MM/DD').format("ddd")
             
             newContent.find(".date-month").text(month);
             newContent.find(".date-day").text(date);
