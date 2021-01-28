@@ -18,9 +18,124 @@
         </h3>
       </div>
     </nav>
-    <div class="columns start-date event-name artist-name"></div>
-    <div class="columns end-date event-details artist-details"></div>
-    <div class="columns history search-results event-artists artist-youtube"></div>
-    <script src="./assets/js/main.js"></script>
+    <section class="hero is-light search-panel">
+      <div class="hero-body">
+          <div class="columns is-mobile is-centered">
+              <h1 class="title is-1 has-text-centered">Meet your favorite artists</h1>
+          </div>
+          <div class="field">
+              <div class="field">
+                  <div class="control columns is-mobile is-centered">
+                      <div class="search-bar column is-two-thirds is-half-tablet">
+                          <div class="control has-icons-left has-icons-right">
+                              <input class="input is-rounded is-large" type="text" placeholder="Search" id="keyword">
+                              <span class="icon is-small is-right">
+                                <i class="fas fa-search"></i>
+                              </span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="field is-grouped is-grouped-multiline columns is-mobile is-centered">
+                  <div class="control">
+                      <label class="label">Start Date</label>
+                      <div class="control">
+                          <input class="input" type="date" id="startDate">
+                      </div>
+                  </div>
+                  <div class="control">
+                      <label class="label">End Date</label>
+                      <div class="control">
+                          <input class="input" type="date" id="endDate">
+                      </div>
+                  </div>  
+              </div>
+              <div class="columns is-mobile is-centered">
+                  <button class="button is-rounded" id="searchButton">Search</button>
+              </div>
+          </div>
+      </div>
+    </section>
+
+  <div class="card featured-event-panel">
+      <header class="card-header">
+          <p class="card-header-title">Featured events</p>
+      </header>
+      <div class="card-content featured-events">
+          <div class="columns is-clearfix is-tablet">
+              <div class="column saved-event">
+                  <img src="https://i.imgur.com/Pyp4DwX.png" alt="image">
+                  <div class="savedEvent-date">
+                      <span class="day">27</span>
+                      <span class="month">Jan</span>
+                      <span class="year">2021</span>
+                  </div>
+                  <div class="info">
+                      <p>Adelaide Oval<span>Adelaide</span></p>
+                  </div>
+              </div>
+              <div class="column saved-event">
+                  <img src="https://i.imgur.com/Pyp4DwX.png" alt="image">
+                  <div class="savedEvent-date">
+                      <span class="day">27</span>
+                      <span class="month">Jan</span>
+                      <span class="year">2021</span>
+                  </div>
+                  <div class="info">
+                      <p>Adelaide Oval<span>Adelaide</span></p>
+                  </div>
+              </div>
+              <div class="column saved-event">
+                  <img src="https://i.imgur.com/Pyp4DwX.png" alt="image">
+                  <div class="savedEvent-date">
+                      <span class="day">27</span>
+                      <span class="month">Jan</span>
+                      <span class="year">2021</span>
+                  </div>
+                  <div class="info">
+                      <p>Adelaide Oval<span>Adelaide</span></p>
+                  </div>
+              </div>
+              <div class="column saved-event">
+                  <img src="https://i.imgur.com/Pyp4DwX.png" alt="image">
+                  <div class="savedEvent-date">
+                      <span class="day">27</span>
+                      <span class="month">Jan</span>
+                      <span class="year">2021</span>
+                  </div>
+                  <div class="info">
+                      <p>Adelaide Oval<span>Adelaide</span></p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="card outer-card column is-8-tablet">
+      <header class="card-header">
+          <p class="card-header-title">Upcoming events</p>
+      </header>
+      <div class="card-content box">
+          <p class="Country is-size-4 has-text-weight-bold">Australia</p>
+          <p class="eventNumber is-size-6 has-text-weight-medium">Events</p>
+      </div>
+      <div class="card-content search-results">
+          <div class="content box columns is-mobile">
+              <div class="eventDate column is-one-fifth is-size-4">
+                  <div class="date-month has-text-centered has-text-weight-bold"></div>
+                  <div class="date-day has-text-centered"></div>
+              </div>
+              <div class="event-info column is-mobile is size-5">
+                  <div class="week-day"></div>
+                  <div class="event-artist has-text-weight-bold"></div>
+                  <div class="venue-location"></div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <script src="./assets/js/main.js"></script>
   </body>
 </html>

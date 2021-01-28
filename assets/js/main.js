@@ -103,3 +103,63 @@ async function spotifyGetArtistService(name) {
 // =======================
 
 // spotifyGetArtistService();
+
+// renderInitialPage
+
+$("#searchButton").on("click", searchEvent);
+function searchEvent(){
+    let queryURLBase= "https://app.ticketmaster.com/discovery/v2/events.json?apikey=2wklXXwfJkLzbYFxIvoGSwhehNloF33O&classificationName=music&dmaId=701&sort=date,asc";
+    let queryURL = queryURLBase;
+    let keyword = $("#keyword").val();
+    let startDateTime = $("#startDate").val();
+    let endDateTime = $("#endDate").val();
+    
+    if(startDateTime){
+        startDateTime = startDateTime+"T00:00:00Z";
+        queryURL = queryURL.concat("&startDateTime="+startDateTime);
+    }else
+
+    if(endDateTime){
+        endDateTime = endDateTime+"T00:00:00Z";
+        queryURL = queryURL.concat("&endDateTime="+endDateTime);
+    }
+    if(keyword){
+        queryURL = queryURL.concat("&keyword="+keyword);
+    }else {
+        return null
+    }
+    console.log(queryURL)
+    
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+    }).then(function(res){
+        console.log(res);
+        let events = res._embedded.events;
+        let cardCopy = $(".search-results").find(".content").clone()
+        $(".search-results").find(".content").remove();
+        $(".eventNumber").text(events.length+" Events")
+        events.forEach(function(e, i){
+            console.log(cardCopy);
+            let newContent = cardCopy.clone();
+            let name = e.name;
+            let location = e._embedded.venues[0].name;
+            let localDate = e.dates.start.localDate;
+            let city = e.dates.timezone.split("/")[1];
+            let date = moment(localDate, 'YYYY/MM/DD').date();
+            let month= moment(localDate, 'YYYY/MM/DD').format("MMM");
+            let time = e.dates.start.localTime? moment(e.dates.start.localTime, "HH:mm:ss").format("hh:mm A"):"TBD";
+            let day = moment(localDate, 'YYYY/MM/DD').format("ddd");
+            console.log(name,location,city,date, day, time, month);
+            
+            newContent.find(".date-month").text(month);
+            newContent.find(".date-day").text(date);
+            newContent.find(".week-day").text(`${day} - ${time}`);
+            newContent.find(".event-artist").text(name);
+            newContent.find(".venue-location").text(`${location} - ${city}`);
+
+            $(".search-results").append(newContent);
+        })
+
+    })
+}
