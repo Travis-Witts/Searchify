@@ -1,14 +1,21 @@
-
-body {
-    background-color: grey;
-}
-
 * {
     box-sizing: border-box;
 }
+/* body{
+    font-size: 5vw;
+} */
 
+nav.level.is-mobile{
+    margin: 0.5rem 0;
+}
+
+.buttonDiv{
+    position: relative;
+    margin-top: 20px;
+}
 .search-panel{
-    height: 100vh;
+    height: 94vh;
+    background-color:#ffa500;
 }
 
 img{
@@ -29,7 +36,14 @@ img{
     left: 50%;
     transform: translate(-50%,-50%);
 }
+#realButton{
+    margin:auto 0;
+}
 
-.featured-events{
-    background-color:brown;
+#nextPage, #previousPage{
+    cursor: pointer;
+}
+
+#nextPage:hover, #previousPage:hover {
+    color: #0378e56e;
 }
