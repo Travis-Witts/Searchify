@@ -2,9 +2,21 @@
 * {
     box-sizing: border-box;
 }
+/* body{
+    font-size: 5vw;
+} */
+
+nav.level.is-mobile{
+    margin: 0.5rem 0;
+}
+
+.buttonDiv{
+    position: relative;
+    margin-top: 20px;
+}
 
 .search-panel{
-    height: 100vh;
+    background-color:#ffa500;
 }
 
 img{
@@ -29,4 +41,25 @@ img{
 .featured-events{
     background-color:brown;
 }
+#alterButton{
+    display: none;
+    margin: auto 0;
+    height: 100%;
+}
 
+#realButton{
+    margin:auto 0;
+}
+
+#nextPage, #previousPage{
+    cursor: pointer;
+}
+
+#nextPage:hover, #previousPage:hover {
+    color: #0378e56e;
+}
+
+@media only screen and (max-width: 800px){
+    #alterButton{display:block}
+    #realButton{display:none}
+}
