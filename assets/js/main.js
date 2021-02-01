@@ -682,7 +682,7 @@ class NavBar {
           <a class="link is-info" id="homeButton" href="#">Home</a>
         </div>
         <div class="level-item">
-          <a class="link is-info">LOGO</a>
+          <a class="link is-info">Searchify</a>
         </div>
         <div class="button is-rounded">
           <a class="link is-info" id="savedButton">Saved Events</a>
