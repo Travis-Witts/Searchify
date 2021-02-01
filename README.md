@@ -38,8 +38,8 @@ The following list of requirements were derived from the project brief and consi
 
 ## Links:
 
-1. Deployed : https://travis297.github.io/artist-search/
-2. GitHub repo: https://github.com/Travis297/artist-search
+1. Deployed : https://travis297.github.io/Searchify/
+2. GitHub repo: https://github.com/Travis297/Searchify
 ---
 
 ## Screenshots of the app:
