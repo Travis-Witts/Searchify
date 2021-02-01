@@ -621,16 +621,15 @@ class EventCard {
       this.app.eventService.saveEvent(this.event);
     });
 
-
     $(`#card-${this.id}`).on("click", () => {
       console.log("Event Details button");
       this.app.renderEventDetails(this.event);
     });
 
-class NavBar {
-  constructor(app) {
-    this.app = app;
-    this.template = `
+    class NavBar {
+      constructor(app) {
+        this.app = app;
+        this.template = `
       <!-- Navbar Component -->
       <nav class="level is-mobile" >
         <div class="button is-rounded">
@@ -644,11 +643,11 @@ class NavBar {
         </div>
       </nav>
     `;
-
-  }
-  render() {
-    return this.template;
+      }
+      render() {
+        return this.template;
+      }
+    }
   }
 }
-
 const app = new App();
