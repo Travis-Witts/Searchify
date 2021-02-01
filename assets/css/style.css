@@ -1,49 +1,79 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 /* body{
     font-size: 5vw;
 } */
 
-nav.level.is-mobile{
-    margin: 0.5rem 0;
+nav.level.is-mobile {
+  margin: 0.5rem 0;
 }
 
-.buttonDiv{
-    position: relative;
-    margin-top: 20px;
+.buttonDiv {
+  position: relative;
+  margin-top: 20px;
 }
-.search-panel{
-    height: 94vh;
-    background-color:#ffa500;
-}
-
-img{
-    width: 60%;
+.search-panel {
+  height: 94vh;
+  background-color: #ffa500;
 }
 
-.saved-event{
-    position: relative;
-}
-.savedEvent-date{
-    position: absolute;
-    top: 10px;
-    left: 20px;
-}
-.info{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-}
-#realButton{
-    margin:auto 0;
+img {
+  width: 60%;
 }
 
-#nextPage, #previousPage{
-    cursor: pointer;
+.saved-event {
+  position: relative;
+}
+.savedEvent-date {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+}
+.info {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+#realButton {
+  margin: auto 0;
 }
 
-#nextPage:hover, #previousPage:hover {
-    color: #0378e56e;
+#nextPage,
+#previousPage {
+  cursor: pointer;
+}
+
+#nextPage:hover,
+#previousPage:hover {
+  color: #0378e56e;
+}
+
+.has-background {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-background {
+  position: absolute;
+  object-fit: cover;
+  object-position: top center;
+  width: 100%;
+  height: 100%;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgb(0, 0, 0);
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 1) 40%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  opacity: 0.5;
 }
