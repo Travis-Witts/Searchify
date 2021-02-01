@@ -313,6 +313,14 @@ class EventDetailsView {
       <section class="hero is-primary is-medium has-background" id="artist-banner">
         <img class="hero-background" src="" id="event-banner-image"></img>
         <div class="overlay"></div>
+                    <a class="save-btn" id="save-${this.id}">
+              <span
+                class="icon has-text-grey-light is-large"
+                style="position: absolute; top: 5%; right: 5%"
+              >
+                <i class="far fa-star fa-2x"></i>
+              </span>
+            </a>;
         <div class="container mx-6">
           <div class="hero-body pl-6" id="hero-text">
             <p class="title is-1 has-text-weight-bold" id="event-title">
@@ -336,7 +344,13 @@ class EventDetailsView {
       <!-- Event Details Info Component -->
       <section class="section" id="info">
         <div class="container">
-          <h1 class="title" id="about-heading">About</h1>
+          <div class="columns">
+            <div class="column">
+              <h1 class="title" id="about-heading">About</h1>
+            </div>
+
+          </div>
+          
           <p id="about-text"></p>
           <a class="button is-primary mt-5" id="tickets-btn">Buy Tickets</a>
         </div>
@@ -354,13 +368,7 @@ class EventDetailsView {
   }
   attachEventHandlers() {}
 
-  async getArtist(name) {
-    // Fetch Artists from Spotify Service
-    const res = await this.app.spotifySearchService.fetchArtist(name);
-  }
-
-  render(event) {
-    console.log(event);
+  async render(event) {
     // Clear Body Content
     $(".app-root").empty();
     // Append View Component To Body Element
@@ -385,11 +393,11 @@ class EventDetailsView {
 
     for (const artist in event._embedded.attractions) {
       console.log(event._embedded.attractions[artist]);
-      const artistName = this.getArtist(
+      const artistSearchRes = await this.app.spotifySearchService.fetchArtist(
         event._embedded.attractions[artist].name
       );
 
-      console.log(artistName);
+      console.log(artistSearchRes.artists[0]);
 
       const card = `
         <div class="card">
@@ -432,7 +440,15 @@ class SavedEventsView {
       <!-- Save Events View Component -->
         <section class="section" id="saved-events">
          <div class="container" id="saved-events-container">
-         <h1 class="title" id="saved-events-heading">
+          <div class="columns">
+            <div class="column">
+              <h1 class="title" id="saved-events-heading">
+            </div>
+            <div class="column has-text-right">
+              <a>Clear Saved Events </a>
+            </div>
+          </div>
+         
          </h1>
           </div>
       </section> 
@@ -532,7 +548,7 @@ class EventCard {
     this.template = `
       <div class="column">
         <!-- Card Component V2 -->
-       
+       <a id="card-${this.id}">
         <div class="card tile-is-child is-flex is-flex-direction-column flex-grow-5" id="card-${
           this.id
         }">
@@ -544,18 +560,11 @@ class EventCard {
                 alt="Placeholder image"
               />
             </figure>
-            <a class="save-btn" id="save-${this.id}">
-              <span
-                class="icon has-text-grey-light is-large"
-                style="position: absolute; top: 5%; right: 5%"
-              >
-                <i class="far fa-star fa-2x"></i>
-              </span>
-            </a>
+
           </div>
           <!-- Card Content Flex Wrapper -->
           <div class="is-flex is-flex-direction-row">
-            <div class="card-content py-3 is-flex-grow-5" id="card-${this.id}">
+            <div class="card-content py-3 is-flex-grow-5">
               <div class="content">
                 <div class="text">
                   <p
@@ -609,6 +618,7 @@ class EventCard {
             </div>
           </div>
         </div>
+        </a>
         <!-- //Card Component V2 -->
         
 
@@ -616,13 +626,12 @@ class EventCard {
     `;
   }
   attachEventHandlers() {
-    $(`#save-${this.id}`).on("click", () => {
-      console.log("save button");
+    $(`#save-${this.id}`).on("click", (e) => {
       this.app.eventService.saveEvent(this.event);
     });
 
-    $(`#card-${this.id}`).on("click", () => {
-      console.log("Event Details button");
+    $(`#card-${this.id}`).on("click", (e) => {
+      e.stopPropagation();
       this.app.renderEventDetails(this.event);
     });
   }
