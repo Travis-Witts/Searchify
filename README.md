@@ -1,14 +1,12 @@
-# Artist-search
+# Searchify
 
 ## Table of Contents
 
-- Overview
-- Technologies Used
-- Requirements
-- Links
-- Screenshots of the App
-- License
-
+- [Overview](#overview)
+- [Technologies](#technologies-used)
+- [Acceptance Criteria](#acceptance-criteria)
+- [Approach](#approach)
+- [License](#license)
 
 
 ## Overview
@@ -37,14 +35,22 @@ The following list of requirements were derived from the project brief and consi
 - The use of client-side storage to store persistent data
 ---
 
+
 ## Links:
 
-1. Deployed :
-2. GitHub repo: 
+1. Deployed : https://travis297.github.io/artist-search/
+2. GitHub repo: https://github.com/Travis297/artist-search
 ---
 
 ## Screenshots of the app:
+Desktop version:
+![alt text](./assets/images/screenshot-1.png)
+![alt text](./assets/images/screenshot-2.png)
 
+
+Mobile version:
+![alt text](./assets/images/screenshot-3.png)
+![alt text](./assets/images/screenshot-4.png)
 
 
 ---
