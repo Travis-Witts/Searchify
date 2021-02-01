@@ -34,7 +34,6 @@ class EventService {
     if (stateCode) {
       queryData.stateCode = stateCode;
     }
-
     if (startDate) {
       queryData.startDateTime = startDate + "T00:00:00Z";
     }
@@ -184,7 +183,7 @@ class HomeView {
 
         <div class="hero-body is-flex-direction-column is-justify-content-center">
           <div class="columns is-mobile is-centered">
-            <h1 class="title is-1 has-text-centered">Find out what's happening in your city!</h1>
+            <h1 class="title is-1 has-text-centered">Find out what's happening in your state!</h1>
           </div>
           <form class="field" id="search-form">
             <div class="field">
@@ -194,8 +193,8 @@ class HomeView {
                     <input
                       class="input is-rounded is-large"
                       type="text"
-                      placeholder="Enter a Location"
-                      id="keyword"
+                      placeholder="Enter a state"
+                      id="keyword" maxlength="3"
                     />
                     <span class="icon is-small is-left">
                       <i class="fas fa-map-marker-alt"></i>
@@ -503,7 +502,7 @@ class NavBar {
           <a class="link is-info" id="homeButton" >Home</a>
         </div>
         <div class="level-item">
-          <a class="link is-info">LOGO</a>
+          <h1 class="title link is-info">Searchify</h1>
         </div>
         <div class="button is-rounded">
           <a class="link is-info" id="savedButton">Saved Events</a>
