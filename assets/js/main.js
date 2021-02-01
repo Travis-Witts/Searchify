@@ -63,7 +63,9 @@ class EventService {
     localStorage.setItem(`${event.id}`, JSON.stringify(event));
   }
 
-  deleteEvent(event) {}
+  clearSavedEvents() {
+    localStorage.clear();
+  }
 }
 
 class SpotifySearchService {
@@ -136,7 +138,7 @@ class App {
 
   renderEventDetails(event) {
     this.eventDetailsView.render(event);
-    this.eventDetailsView.attachEventHandlers();
+    this.eventDetailsView.attachEventHandlers(event);
     this.navbar.render();
     this.navbar.attachEventHandlers();
   }
@@ -312,7 +314,7 @@ class EventDetailsView {
       <section class="hero is-primary is-medium has-background" id="artist-banner">
         <img class="hero-background" src="" id="event-banner-image"></img>
         <div class="overlay"></div>
-                    <a class="save-btn" id="save-${this.id}">
+                    <a class="save-btn">
               <span
                 class="icon has-text-grey-light is-large"
                 style="position: absolute; top: 5%; right: 5%"
@@ -365,7 +367,11 @@ class EventDetailsView {
       </section>
     `;
   }
-  attachEventHandlers() {}
+  attachEventHandlers(event) {
+    $(`.save-btn`).on("click", () => {
+      this.app.eventService.saveEvent(event);
+    });
+  }
 
   async render(event) {
     // Clear Body Content
@@ -444,17 +450,23 @@ class SavedEventsView {
               <h1 class="title" id="saved-events-heading">
             </div>
             <div class="column has-text-right">
-              <a>Clear Saved Events </a>
+              <a id="clear-button">Clear Saved Events </a>
             </div>
           </div>
          
-         </h1>
+         
           </div>
       </section> 
     `;
   }
 
-  attachEventHandlers() {}
+  attachEventHandlers() {
+    $("#clear-button").on("click", () => {
+      this.app.eventService.clearSavedEvents();
+      $("#saved-events-heading").text(`Found 0 Saved Events.`);
+      $("#card-list-wrapper").empty();
+    });
+  }
 
   render(events) {
     const eventsCount = events.length;
@@ -464,12 +476,12 @@ class SavedEventsView {
     $(".app-root").append(this.template);
 
     // Select #saved-events-container Element from DOM
-    const resultsContainerEl = $("#saved-events-container");
+    const savedEventsContainerEl = $("#saved-events-container");
 
     // Select Saved Events Heading Element From DOM
     $("#saved-events-heading").text(`Found ${eventsCount} Saved Events.`);
 
-    const columns = '<div class="columns"></div>';
+    const columns = '<div class="columns" id="card-list-wrapper"></div>';
     let cardCount = 0;
 
     // Render Event Cards
@@ -477,12 +489,12 @@ class SavedEventsView {
       const card = new EventCard(this.app, events[event]);
 
       if (cardCount === 0 || cardCount % 3 === 0) {
-        resultsContainerEl.append(columns);
-        resultsContainerEl.children().last().append(card.render());
+        savedEventsContainerEl.append(columns);
+        savedEventsContainerEl.children().last().append(card.render());
         card.attachEventHandlers();
         cardCount++;
       } else {
-        resultsContainerEl.children().last().append(card.render());
+        savedEventsContainerEl.children().last().append(card.render());
         card.attachEventHandlers();
         cardCount++;
       }
@@ -625,10 +637,6 @@ class EventCard {
     `;
   }
   attachEventHandlers() {
-    $(`#save-${this.id}`).on("click", (e) => {
-      this.app.eventService.saveEvent(this.event);
-    });
-
     $(`#card-${this.id}`).on("click", (e) => {
       e.stopPropagation();
       this.app.renderEventDetails(this.event);
