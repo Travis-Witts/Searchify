@@ -540,9 +540,10 @@ class EventCard {
     this.startTime = event.dates.start.localTime;
     this.date = new Date(
       this.startDate.substr(0, 4),
-      this.startDate.substr(5, 2),
+      this.startDate.substr(6, 1) -1,
       this.startDate.substr(8, 2)
     );
+    console.log(this.startDate)
 
     this.template = `
       <div class="column">
