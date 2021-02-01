@@ -237,13 +237,6 @@ class App {
     this.navbar.render();
     this.navbar.attachEventHandlers();
   }
-
-  // async getArtist(name) {
-  //   // Fetch Artists from Spotify Service
-  //   const res = await this.spotifySearchService.fetchArtist(name);
-  //   this.eventDetailsView.render(res);
-
-  // }
 }
 
 // =======================
@@ -460,14 +453,13 @@ class EventDetailsView {
     const columns = '<div class="columns"></div>';
 
     for (const artist in event._embedded.attractions) {
-      console.log(event._embedded.attractions);
       console.log(event._embedded.attractions[artist]);
       const artistName = this.getArtist(
         event._embedded.attractions[artist].name
       );
-      artistName.then((res) => {
-        console.log(res);
-      });
+
+      console.log(artistName);
+
       const card = `
         <div class="card">
           <div class="card-image">
