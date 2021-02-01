@@ -1,112 +1,21 @@
-// Define global variables
-// =======================
-const eventArray = ["1AKZAJ3GkdtJ6Bi", "1AvGZp9GkBqesc5"];
-// =======================
+// $("#savedButton").on("click", savedEvents);
+// function savedEvents() {
+//   $(".hero-body").empty();
+//   $(".card-content").empty();
+//   $(".card-header-title").text("");
+//   for (i = 0; i < eventArray.length; i++) {
+//     let queryURL =
+//       "https://app.ticketmaster.com/discovery/v2/events/" +
+//       eventArray[i] +
+//       ".json?apikey=2wklXXwfJkLzbYFxIvoGSwhehNloF33O";
 
-// UI Functions
-// =======================
-
-// Display Event Details
-// -----------------------
-
-// -----------------------
-
-// Display Acts/artists
-// -----------------------
-
-// -----------------------
-
-// Display Artist Info Function
-// -----------------------
-
-// -----------------------
-
-// =======================
-
-// Logic functions
-
-// =======================
-
-// Ticketmaster API search function
-// -----------------------
-
-// Spotify API artist search function
-// -----------------------
-
-// =======================
-
-// Listeners go down here
-
-// =======================
-
-// Search button listener
-// -----------------------
-
-// -----------------------
-
-// Artist profile link listener
-// -----------------------
-
-// -----------------------
-
-// =======================
-
-// spotifyGetArtistService();
-
-// renderInitialPage
-
-// $("#searchButton").on("click", searchEvent);
-// function searchEvent() {
-//   let queryURLBase =
-//     "https://app.ticketmaster.com/discovery/v2/events.json?apikey=2wklXXwfJkLzbYFxIvoGSwhehNloF33O&classificationName=music&dmaId=701&sort=date,asc";
-//   let queryURL = queryURLBase;
-//   let keyword = $("#keyword").val();
-//   let startDateTime = $("#startDate").val();
-//   let endDateTime = $("#endDate").val();
-
-//   if (startDateTime) {
-//     startDateTime = startDateTime + "T00:00:00Z";
-//     queryURL = queryURL.concat("&startDateTime=" + startDateTime);
-//   } else if (endDateTime) {
-//     endDateTime = endDateTime + "T00:00:00Z";
-//     queryURL = queryURL.concat("&endDateTime=" + endDateTime);
-//   }
-//   if (keyword) {
-//     queryURL = queryURL.concat("&city=" + keyword);
-//   } else {
-//     return null;
-//   }
-//   console.log(queryURL);
-
-//   $.ajax({
-//     url: queryURL,
-//     method: "GET",
-//   }).then(function (res) {
-//     console.log(res);
-//     let events = res._embedded.events;
-//     var outer = $(".outer-card").empty();
-//     outer.append(
-//       $("<header>")
-//         .addClass("card-header")
-//         .append($("<p>").addClass("card-header-title").text("Upcoming Events"))
-//     );
-//     outer.append(
-//       $("<div>")
-//         .addClass("card-content box")
-//         .append(
-//           $("<p>")
-//             .addClass("Country is-size-4 has-text-weight-bold")
-//             .text(keyword)
-//         )
-//         .append(
-//           $("<p>")
-//             .addClass("eventNumber is-size-6 has-text-weight-medium")
-//             .text("Events")
-//         )
-//     );
-//     outer.append($("<div>").addClass("card-content search-results"));
-//     $(".eventNumber").text(events.length + " Events");
-//     events.forEach(function (e) {
+//     $.ajax({
+//       url: queryURL,
+//       method: "GET",
+//     }).then(function (res) {
+//       console.log(res);
+//       let event = res;
+//       $(".eventNumber").text(eventArray.length + " Events");
 //       let card = $("<div>").addClass("content box columns is-mobile");
 //       let eventDate = $("<div>").addClass(
 //         "eventDate column is-one-fifth is-size-4"
@@ -137,13 +46,13 @@ const eventArray = ["1AKZAJ3GkdtJ6Bi", "1AvGZp9GkBqesc5"];
 //       card.append(eventInfo);
 //       card.append(eventBTN);
 //       let newContent = card;
-//       let name = e.name;
-//       let location = e._embedded.venues[0].name;
-//       let localDate = e.dates.start.localDate;
+//       let name = event.name;
+//       let location = event._embedded.venues[0].name;
+//       let localDate = event.dates.start.localDate;
 //       let date = moment(localDate, "YYYY/MM/DD").date();
 //       let month = moment(localDate, "YYYY/MM/DD").format("MMM");
-//       let time = e.dates.start.localTime
-//         ? moment(e.dates.start.localTime, "HH:mm:ss").format("hh:mm A")
+//       let time = event.dates.start.localTime
+//         ? moment(event.dates.start.localTime, "HH:mm:ss").format("hh:mm A")
 //         : "TBD";
 //       let day = moment(localDate, "YYYY/MM/DD").format("ddd");
 
@@ -153,79 +62,10 @@ const eventArray = ["1AKZAJ3GkdtJ6Bi", "1AvGZp9GkBqesc5"];
 //       newContent.find(".event-artist").text(name);
 //       newContent.find(".venue-location").text(`${location}`);
 
-//       $(".search-results").append(newContent);
+//       $(".hero-body").append(newContent);
 //     });
-//   });
+//   }
 // }
-
-$("#savedButton").on("click", savedEvents);
-function savedEvents() {
-  $(".hero-body").empty();
-  $(".card-content").empty();
-  $(".card-header-title").text("");
-  for (i = 0; i < eventArray.length; i++) {
-    let queryURL =
-      "https://app.ticketmaster.com/discovery/v2/events/" +
-      eventArray[i] +
-      ".json?apikey=2wklXXwfJkLzbYFxIvoGSwhehNloF33O";
-
-    $.ajax({
-      url: queryURL,
-      method: "GET",
-    }).then(function (res) {
-      console.log(res);
-      let event = res;
-      $(".eventNumber").text(eventArray.length + " Events");
-      let card = $("<div>").addClass("content box columns is-mobile");
-      let eventDate = $("<div>").addClass(
-        "eventDate column is-one-fifth is-size-4"
-      );
-      let eventInfo = $("<div>").addClass(
-        "event-info column is-mobile is-size-5"
-      );
-      let eventBTN = $("<div>")
-        .addClass("column is-one-fifth")
-        .append(
-          $("<button>")
-            .addClass("button is-info is-rounded")
-            .text("See Details")
-        );
-      eventDate
-        .append(
-          $("<div>").addClass(
-            "date-month has-text-centered has-text-weight-bold"
-          )
-        )
-        .append($("<div>").addClass("date-day has-text-centered"));
-      eventInfo
-        .append($("<div>").addClass("week-day"))
-        .append($("<div>").addClass("event-artist has-text-weight-bold"))
-        .append($("<div>").addClass("venue-location"));
-
-      card.append(eventDate);
-      card.append(eventInfo);
-      card.append(eventBTN);
-      let newContent = card;
-      let name = event.name;
-      let location = event._embedded.venues[0].name;
-      let localDate = event.dates.start.localDate;
-      let date = moment(localDate, "YYYY/MM/DD").date();
-      let month = moment(localDate, "YYYY/MM/DD").format("MMM");
-      let time = event.dates.start.localTime
-        ? moment(event.dates.start.localTime, "HH:mm:ss").format("hh:mm A")
-        : "TBD";
-      let day = moment(localDate, "YYYY/MM/DD").format("ddd");
-
-      newContent.find(".date-month").text(month);
-      newContent.find(".date-day").text(date);
-      newContent.find(".week-day").text(`${day} - ${time}`);
-      newContent.find(".event-artist").text(name);
-      newContent.find(".venue-location").text(`${location}`);
-
-      $(".hero-body").append(newContent);
-    });
-  }
-}
 
 // =======================
 // Model Class Definitions
@@ -251,41 +91,47 @@ class Event {
 // Application Service Class Definition
 // =======================
 class EventService {
-  constructor(stateCode, startDate, endDate) {
+  constructor() {
     this.queryBaseURL =
       "https://app.ticketmaster.com/discovery/v2/events.json?apikey=2wklXXwfJkLzbYFxIvoGSwhehNloF33O&classificationName=music&dmaId=701&sort=date,asc";
     this.API_KEY = "2wklXXwfJkLzbYFxIvoGSwhehNloF33O";
-
-    this.queryData;
-
-    if (stateCode) {
-      this.queryData.stateCode = stateCode;
-    }
-
-    if (startDate) {
-      this.queryData.startDateTime = startDate + "T00:00:00Z";
-    }
-
-    if (endDate) {
-      this.queryData.endDateTime = endDate + "T00:00:00Z";
-    }
-
-    // const events = this.getEvents();
-    // this.events = events.map((event) => new Event(event));
   }
 
   // Fetch Events From TicketMaster API (Returns Promise)
-  fetchEvents() {
+  fetchEvents(stateCode, startDate, endDate) {
+    let queryData = {};
+    if (stateCode) {
+      queryData.stateCode = stateCode;
+    }
+
+    if (startDate) {
+      queryData.startDateTime = startDate + "T00:00:00Z";
+    }
+
+    if (endDate) {
+      queryData.endDateTime = endDate + "T00:00:00Z";
+    }
+
     return $.ajax({
       url: this.queryBaseURL,
       method: "GET",
-      data: {
-        stateCode: "SA",
-      },
+      data: queryData,
     });
   }
 
-  saveEvent(event) {}
+  // Fetch Saved Events From LocalStorage
+  fetchSavedEvents() {
+    let savedEvents = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      let event = JSON.parse(localStorage.getItem(localStorage.key(i)));
+      savedEvents.push(event);
+    }
+    return savedEvents;
+  }
+
+  saveEvent(event) {
+    localStorage.setItem(`${event.id}`, JSON.stringify(event));
+  }
 
   deleteEvent(event) {}
 }
@@ -309,17 +155,14 @@ class SpotifySearchService {
       headers: {
         Authorization: `Basic ${clientKey}`,
       },
-    }).then(function (response) {
-      // Return Access Token
-      return response.access_token;
     });
   }
 
   async fetchArtist(name) {
     const token = await this.getAuthToken();
+
     const queryURL = "https://api.spotify.com/v1/search";
-    let data;
-    $.ajax({
+    return $.ajax({
       url: queryURL,
       method: "GET",
       data: {
@@ -327,10 +170,8 @@ class SpotifySearchService {
         type: "artist",
       },
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token.access_token}`,
       },
-    }).then((response) => {
-      return response;
     });
   }
 }
@@ -341,17 +182,21 @@ class SpotifySearchService {
 class App {
   constructor() {
     // Instantiate View Components
-    this.navbar = new NavBar(this);
     this.homeView = new HomeView(this);
     this.resultsView = new ResultsView(this);
     this.eventDetailsView = new EventDetailsView(this);
+    this.savedEventsView = new SavedEventsView(this);
+    this.navbar = new NavBar(this);
 
     // Instantiate Service Providers
     this.eventService = new EventService();
     this.spotifySearchService = new SpotifySearchService();
 
-    console.log(this.spotifySearchService.fetchArtist("architects"));
+    // Render Default View
+    this.renderHome();
+  }
 
+  renderHome() {
     // Render Default View
     this.homeView.render();
     this.homeView.attachEventHandlers();
@@ -359,16 +204,11 @@ class App {
     this.navbar.attachEventHandlers();
   }
 
-  renderHome() {
-    console.log("I run");
-    // Render Default View
-    this.homeView.render();
-    this.homeView.attachEventHandlers();
-  }
-
-  renderEventDetails() {
-    this.eventDetailsView.render();
+  renderEventDetails(event) {
+    this.eventDetailsView.render(event);
     this.eventDetailsView.attachEventHandlers();
+    this.navbar.render();
+    this.navbar.attachEventHandlers();
   }
 
   async getEvents(stateCode, startDate, endDate) {
@@ -385,11 +225,32 @@ class App {
     this.navbar.render();
     this.navbar.attachEventHandlers();
   }
+
+  getSavedEvents() {
+    // Fetch Saved Events From Local Storage
+    const events = this.eventService.fetchSavedEvents();
+    this.savedEventsView.render(events);
+    // Attach Saved Events View Event Handlers
+    this.savedEventsView.attachEventHandlers();
+
+    // Render Navbar Component
+    this.navbar.render();
+    this.navbar.attachEventHandlers();
+  }
+
+  // async getArtist(name) {
+  //   // Fetch Artists from Spotify Service
+  //   const res = await this.spotifySearchService.fetchArtist(name);
+  //   this.eventDetailsView.render(res);
+
+  // }
 }
 
 // =======================
-// View Component Class Definitions
+// || View Class Definitions
 // =======================
+
+// Page Class Definitions
 
 class HomeView {
   constructor(app) {
@@ -476,7 +337,8 @@ class ResultsView {
       <!-- Results View Component -->
         <section class="section" id="results">
          <div class="container" id="results-container">
-
+         <h1 class="title" id="results-heading">
+         </h1>
           </div>
       </section>
     `;
@@ -485,6 +347,7 @@ class ResultsView {
 
   render(data) {
     const events = data._embedded.events;
+    const eventsCount = data.page.totalElements;
 
     // Clear Body Content
     $(".app-root").empty();
@@ -494,23 +357,23 @@ class ResultsView {
     // Select #results Element from DOM
     const resultsContainerEl = $("#results-container");
 
+    // Select Results Heading Element From DOM
+    $("#results-heading").text(`Found ${eventsCount} events.`);
+
     const columns = '<div class="columns"></div>';
     let cardCount = 0;
     // Render Event Cards
     for (const event in events) {
-      console.log(events[event]);
       const card = new EventCard(this.app, events[event]);
 
       if (cardCount === 0 || cardCount % 3 === 0) {
-        console.log("condition met!");
         resultsContainerEl.append(columns);
         resultsContainerEl.children().last().append(card.render());
         card.attachEventHandlers();
         cardCount++;
-        console.log(cardCount);
       } else {
-        console.log("condition not met!");
         resultsContainerEl.children().last().append(card.render());
+        card.attachEventHandlers();
         cardCount++;
       }
     }
@@ -524,12 +387,12 @@ class EventDetailsView {
       <!--|| Event Details View Component-->
       <!-- Event Details Hero Component -->
       <section class="hero is-primary is-medium has-background" id="artist-banner">
-        <img class="hero-background" src="https://www.nme.com/wp-content/uploads/2020/10/architects-696x442.jpg"></img>
+        <img class="hero-background" src="" id="event-banner-image"></img>
         <div class="overlay"></div>
         <div class="container mx-6">
           <div class="hero-body pl-6" id="hero-text">
-            <p class="title is-1 has-text-weight-bold">
-              In Hearts Wake 2020 Australian Tour
+            <p class="title is-1 has-text-weight-bold" id="event-title">
+              
             </p>
       <!-- Event Venue Element -->
       <div class="icon-text mb-0 level">
@@ -547,26 +410,190 @@ class EventDetailsView {
       </section>
 
       <!-- Event Details Info Component -->
-      <section class="section">
+      <section class="section" id="info">
         <div class="container">
-          <h1 class="title" id="event-about">About</h1>
+          <h1 class="title" id="about-heading">About</h1>
+          <p id="about-text"></p>
+          <a class="button is-primary mt-5" id="tickets-btn">Buy Tickets</a>
+        </div>
+      </section>
+
+      <!-- Event Artists Component -->
+      <section class="section" id="artists">
+        <div class="container" id="artists-wrapper">
+          <div class="columns">
+
+          </div>
         </div>
       </section>
     `;
   }
   attachEventHandlers() {}
 
-  render() {
+  async getArtist(name) {
+    // Fetch Artists from Spotify Service
+    const res = await this.app.spotifySearchService.fetchArtist(name);
+  }
+
+  render(event) {
+    console.log(event);
     // Clear Body Content
     $(".app-root").empty();
     // Append View Component To Body Element
     $(".app-root").append(this.template);
+
+    // Set Event Banner Image
+    $("#event-banner-image").attr("src", `${event.images[0].url}`);
+
+    // Set Event Title
+    $("#event-title").text(event.name);
+
+    // Set Event Venue
+    $("#event-venue").text(event._embedded.venues[0].name);
+
+    // Set About Text
+    $("#about-text").text(event.info);
+
+    // Set Buy Tickets Button href
+    $("#tickets-btn").attr("href", `${event.url}`);
+
+    const columns = '<div class="columns"></div>';
+
+    for (const artist in event._embedded.attractions) {
+      console.log(event._embedded.attractions);
+      console.log(event._embedded.attractions[artist]);
+      const artistName = this.getArtist(
+        event._embedded.attractions[artist].name
+      );
+      artistName.then((res) => {
+        console.log(res);
+      });
+      const card = `
+        <div class="card">
+          <div class="card-image">
+            <figure class="image is-4by3">
+              <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
+            </figure>
+          </div>
+          <div class="card-content">
+            <div class="media">
+              <div class="media-left">
+                <figure class="image is-48x48">
+                  <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+                </figure>
+              </div>
+              <div class="media-content">
+                <p class="title is-4">John Smith</p>
+                <p class="subtitle is-6">@johnsmith</p>
+              </div>
+            </div>
+
+            <div class="content">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+              <a href="#">#css</a> <a href="#">#responsive</a>
+              <br>
+              <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+            </div>
+          </div>
+      </div>
+      `;
+    }
+  }
+}
+
+class SavedEventsView {
+  constructor(app) {
+    this.app = app;
+    this.template = `
+      <!-- Save Events View Component -->
+        <section class="section" id="saved-events">
+         <div class="container" id="saved-events-container">
+         <h1 class="title" id="saved-events-heading">
+         </h1>
+          </div>
+      </section> 
+    `;
+  }
+
+  attachEventHandlers() {}
+
+  render(events) {
+    const eventsCount = events.length;
+    // Clear Body Content
+    $(".app-root").empty();
+    // Append View Component To Body Element
+    $(".app-root").append(this.template);
+
+    // Select #saved-events-container Element from DOM
+    const resultsContainerEl = $("#saved-events-container");
+
+    // Select Saved Events Heading Element From DOM
+    $("#saved-events-heading").text(`Found ${eventsCount} Saved Events.`);
+
+    const columns = '<div class="columns"></div>';
+    let cardCount = 0;
+
+    // Render Event Cards
+    for (const event in events) {
+      const card = new EventCard(this.app, events[event]);
+
+      if (cardCount === 0 || cardCount % 3 === 0) {
+        resultsContainerEl.append(columns);
+        resultsContainerEl.children().last().append(card.render());
+        card.attachEventHandlers();
+        cardCount++;
+      } else {
+        resultsContainerEl.children().last().append(card.render());
+        card.attachEventHandlers();
+        cardCount++;
+      }
+    }
+  }
+}
+
+// Component Class Definitions
+
+class NavBar {
+  constructor(app) {
+    this.app = app;
+    this.template = `
+      <!-- Navbar Component -->
+      <nav class="level is-mobile" >
+        <div class="button is-rounded">
+          <a class="link is-info" id="homeButton" >Home</a>
+        </div>
+        <div class="level-item">
+          <a class="link is-info">LOGO</a>
+        </div>
+        <div class="button is-rounded">
+          <a class="link is-info" id="savedButton">Saved Events</a>
+        </div>
+      </nav>
+    `;
+  }
+
+  attachEventHandlers() {
+    // Home Button Event Listener
+    $("#homeButton").on("click", () => {
+      this.app.renderHome();
+    });
+    // Saved Events Button Event Listener
+    $("#savedButton").on("click", () => {
+      this.app.getSavedEvents();
+    });
+  }
+
+  render() {
+    // Append View Component To Body Element
+    $(".app-root").prepend(this.template);
   }
 }
 
 class EventCard {
   constructor(app, event) {
     this.app = app;
+    this.event = event;
     this.id = event.id;
     this.imgUrl = event.images[0].url;
     this.name = event.name;
@@ -582,8 +609,8 @@ class EventCard {
     this.template = `
       <div class="column">
         <!-- Card Component V2 -->
-        <a id="card-wrapper">
-        <div class="card tile-is-child is-flex is-flex-direction-column flex-grow-5" id="${
+       
+        <div class="card tile-is-child is-flex is-flex-direction-column flex-grow-5" id="card-${
           this.id
         }">
           <!-- Card Image Element -->
@@ -594,16 +621,18 @@ class EventCard {
                 alt="Placeholder image"
               />
             </figure>
-            <span
-              class="icon has-text-grey-light is-large"
-              style="position: absolute; top: 5%; right: 5%"
-            >
-              <i class="far fa-star fa-2x"></i>
-            </span>
+            <a class="save-btn" id="save-${this.id}">
+              <span
+                class="icon has-text-grey-light is-large"
+                style="position: absolute; top: 5%; right: 5%"
+              >
+                <i class="far fa-star fa-2x"></i>
+              </span>
+            </a>
           </div>
           <!-- Card Content Flex Wrapper -->
           <div class="is-flex is-flex-direction-row">
-            <div class="card-content py-3 is-flex-grow-5">
+            <div class="card-content py-3 is-flex-grow-5" id="card-${this.id}">
               <div class="content">
                 <div class="text">
                   <p
@@ -658,44 +687,24 @@ class EventCard {
           </div>
         </div>
         <!-- //Card Component V2 -->
-        </a>
+        
 
     </div>
     `;
   }
   attachEventHandlers() {
-    console.log("click!");
-    $("#card-wrapper").on("click", this.app.renderEventDetails);
+    $(`#save-${this.id}`).on("click", () => {
+      console.log("save button");
+      this.app.eventService.saveEvent(this.event);
+    });
+
+    $(`#card-${this.id}`).on("click", () => {
+      console.log("Event Details button");
+      this.app.renderEventDetails(this.event);
+    });
   }
   render() {
     return this.template;
-  }
-}
-
-class NavBar {
-  constructor(app) {
-    this.app = app;
-    this.template = `
-      <!-- Navbar Component -->
-      <nav class="level is-mobile" >
-        <div class="button is-rounded">
-          <a class="link is-info" id="homeButton" href="#">Home</a>
-        </div>
-        <div class="level-item">
-          <a class="link is-info">LOGO</a>
-        </div>
-        <div class="button is-rounded">
-          <a class="link is-info" id="savedButton">Saved Events</a>
-        </div>
-      </nav>
-    `;
-  }
-
-  attachEventHandlers() {}
-
-  render() {
-    // Append View Component To Body Element
-    $(".app-root").prepend(this.template);
   }
 }
 
