@@ -12,8 +12,7 @@ var eventArray = JSON.parse(localStorage.getItem("historyArray")) || [];
 function renderCard(event) {
   if (eventArray.indexOf(event.id) >= 0) {
     var buttonText = "Saved";
-  }
-  else {
+  } else {
     var buttonText = "Save";
   }
   let localDate = event.dates.start.localDate;
@@ -78,42 +77,55 @@ function renderNav() {
 // Display search
 function renderSearch() {
   let searchPanel = `
-  <section class="hero is-light search-panel">
+  <section class="hero is-light  search-panel">
   <div class="hero-body">
     <div class="columns is-mobile is-centered">
       <h1 class="title is-1 has-text-centered">Find out what's happening in your city!</h1>
     </div>
-    <div class="field">
-      <div class="field">
-        <div class="control columns is-mobile is-centered">
-          <div class="search-bar column is-two-thirds is-half-tablet">
-            <div class="control has-icons-left has-icons-right">
-              <input class="input is-rounded is-large" type="text" placeholder="Search" id="keyword">
-              <span class="icon is-small is-right">
-                <i class="fas fa-search"></i>
-              </span>
+      <form>
+        <div class="field">
+          <div class="control columns is-mobile is-centered">
+            <div class="search-bar column is-two-thirds is-half-tablet">
+              <div class="control has-icons-left">
+                <input
+                  class="input is-rounded is-large"
+                  type="text"
+                  placeholder="Enter a Location"
+                  id="keyword"
+                />
+                <span class="icon is-small is-left">
+                  <i class="fas fa-map-marker-alt"></i>
+                </span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="field is-grouped is-grouped-multiline columns is-mobile is-centered">
-        <div class="control">
-          <label class="label">Start Date</label>
+        <div
+          class="field is-grouped is-grouped-multiline columns is-mobile is-centered"
+        >
           <div class="control">
-            <input class="input" type="date" id="startDate">
+            <label class="label">Start Date</label>
+            <div class="control">
+              <input class="input" type="date" id="startDate" />
+            </div>
+          </div>
+          <div class="control">
+            <label class="label">End Date</label>
+            <div class="control">
+              <input class="input" type="date" id="endDate" />
+            </div>
           </div>
         </div>
-        <div class="control">
-          <label class="label">End Date</label>
-          <div class="control">
-            <input class="input" type="date" id="endDate">
-          </div>
+        <div class="columns is-mobile is-centered">
+          <button
+            href=".card-header-title"
+            class="button is-rounded"
+            id="searchButton"
+          >
+            Search
+          </button>
         </div>
-      </div>
-      <div class="columns is-mobile is-centered">
-        <button href=".card-header-title" class="button is-rounded" id="searchButton">Search</button>
-      </div>
-    </div>
+      </form>
   </div>
 </section>
   `;
@@ -207,7 +219,7 @@ async function spotifyGetArtistService(name) {
 renderNav();
 renderSearch();
 
-$(document).on("click", "#searchButton", function(event) {
+$(document).on("click", "#searchButton", function (event) {
   event.preventDefault();
   let queryURLBase =
     "https://app.ticketmaster.com/discovery/v2/events.json?apikey=2wklXXwfJkLzbYFxIvoGSwhehNloF33O&classificationName=music&dmaId=701&sort=date,asc";
@@ -219,11 +231,13 @@ $(document).on("click", "#searchButton", function(event) {
   if (startDate) {
     startDate = startDate + "T00:00:00Z";
     queryData.startDateTime = startDate;
+    console.log(queryData.startDateTime);
   }
 
   if (endDate) {
     endDate = endDate + "T00:00:00Z";
     queryData.endDateTime = endDate;
+    console.log(queryData.endDateTime);
   }
   if (cityName) {
     queryData.city = cityName;
@@ -234,6 +248,7 @@ $(document).on("click", "#searchButton", function(event) {
     data: queryData,
   }).then(async function (res) {
     let events = await res._embedded.events;
+    console.log(events);
     $(".outer-card").empty();
     var eventsHeader = `
       <div class="card outer-card column is-tablet">
@@ -256,7 +271,7 @@ $(document).on("click", "#searchButton", function(event) {
   });
 });
 
-$(document).on("click", "#savedButton", function(event) {
+$(document).on("click", "#savedButton", function (event) {
   event.preventDefault();
   $("body").empty();
   renderNav();
@@ -303,8 +318,7 @@ $(document).on("click", ".save-new-event", function (event) {
       if (eventArray.indexOf(savedEvent) >= 0) {
         localStorage.clear();
         localStorage.setItem("historyArray", JSON.stringify(eventArray));
-      } 
-      else {
+      } else {
         localStorage.clear();
         eventArray.splice(0, 0, savedEvent);
         localStorage.setItem("historyArray", JSON.stringify(eventArray));
@@ -317,10 +331,60 @@ $(document).on("click", ".save-new-event", function (event) {
   }
 });
 
-
 $(document).on("click", "#homeButton", function (event) {
   event.preventDefault();
   $("body").empty();
   renderNav();
   renderSearch();
 });
+
+// REFACTOR!!!!!!!!! //
+// =======================
+// Application Service Class Definition
+// =======================
+
+class EventService {
+  constructor(stateCode, startDate, endDate) {
+    this.queryBaseURL =
+      "https://app.ticketmaster.com/discovery/v2/events.json?apikey=2wklXXwfJkLzbYFxIvoGSwhehNloF33O&classificationName=music&dmaId=701&sort=date,asc";
+    this.API_KEY = "2wklXXwfJkLzbYFxIvoGSwhehNloF33O";
+
+    this.queryData;
+
+    if (stateCode) {
+      this.queryData.stateCode = stateCode;
+    }
+
+    if (startDate) {
+      this.queryData.startDateTime = startDate + "T00:00:00Z";
+    }
+
+    if (endDate) {
+      this.queryData.endDateTime = endDate + "T00:00:00Z";
+    }
+
+    // const events = this.getEvents();
+    // this.events = events.map((event) => new Event(event));
+  }
+
+  // Fetch Events From TicketMaster API (Returns Promise)
+  fetchEvents() {
+    return $.ajax({
+      url: this.queryBaseURL,
+      method: "GET",
+      data: {
+        stateCode: "SA",
+      },
+    });
+  }
+
+  saveEvent(event) {}
+}
+
+// =======================
+// Application Controller Class Definition
+// =======================
+
+// =======================
+// View Component Class Definitions
+// =======================
