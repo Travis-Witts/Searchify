@@ -384,7 +384,310 @@ class EventService {
 // =======================
 // Application Controller Class Definition
 // =======================
+class App {
+  constructor() {
+    // Instantiate View Components
+    this.homeView = new HomeView(this);
+    this.resultsView = new ResultsView(this);
+    this.eventDetailsView = new EvenDetailsView();
+
+    // Instantiate Service Providers
+    this.eventService = new EventService();
+
+    // Render Default View
+    this.homeView.render();
+    this.homeView.attachEventHandlers();
+  }
+
+  async getEvents(stateCode, startDate, endDate) {
+    // Fetch Events from Event Service
+    const events = await this.eventService.fetchEvents(
+      stateCode,
+      startDate,
+      endDate
+    );
+    // Render Results View
+    this.resultsView.render(events);
+    // Attach Results View Event Handlers
+    this.resultsView.attachEventHandlers();
+    return events;
+  }
+}
 
 // =======================
 // View Component Class Definitions
 // =======================
+
+class HomeView {
+  constructor(app) {
+    this.app = app;
+    this.template = `
+      <section class="hero is-light is-fullheight search-panel" id="search-component">
+        <div class="hero-head">
+          <nav class="navbar">
+            <div class="container">
+              <div class="navbar-brand">
+                <a class="navbar-item">
+                  Event Search
+                </a>
+                <span class="navbar-burger" data-target="navbarMenuHeroA">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </span>
+              </div>
+              <div id="navbarMenuHeroA" class="navbar-menu">
+                <div class="navbar-end">
+                  <a class="navbar-item is-active">
+                    Home
+                  </a>
+                  <a class="navbar-item">
+                    Examples
+                  </a>
+                  <a class="navbar-item">
+                    Documentation
+                  </a>
+                  <span class="navbar-item">
+                    <a class="button is-primary is-inverted">
+                      <span class="icon">
+                        <i class="fab fa-github"></i>
+                      </span>
+                      <span>Download</span>
+                    </a>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
+        <div class="hero-body is-flex-direction-column is-justify-content-center">
+          <div class="columns is-mobile is-centered">
+            <h1 class="title is-1 has-text-centered">Find out what's happening in your city!</h1>
+          </div>
+          <form class="field" id="search-form">
+            <div class="field">
+              <div class="control columns is-mobile is-centered">
+                <div class="search-bar column is-two-thirds is-half-tablet">
+                  <div class="control has-icons-left">
+                    <input
+                      class="input is-rounded is-large"
+                      type="text"
+                      placeholder="Enter a Location"
+                      id="keyword"
+                    />
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-map-marker-alt"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="field is-grouped is-grouped-multiline columns is-mobile is-centered"
+            >
+              <div class="control">
+                <label class="label">Start Date</label>
+                <div class="control">
+                  <input class="input" type="date" id="startDate" />
+                </div>
+              </div>
+              <div class="control">
+                <label class="label">End Date</label>
+                <div class="control">
+                  <input class="input" type="date" id="endDate" />
+                </div>
+              </div>
+            </div>
+            <div class="columns is-mobile is-centered">
+              <button
+                type="submit"
+                class="button is-rounded"
+                id="searchButton"
+              >
+                Search
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+    `;
+  }
+
+  attachEventHandlers() {
+    $("#search-form").on("submit", (e) => {
+      e.preventDefault();
+      console.log(e);
+      this.app.getEvents(
+        e.target[0].value,
+        e.target[1].value,
+        e.target[2].value
+      );
+    });
+  }
+
+  render() {
+    // Clear Body Content
+    $(".app-root").empty();
+    // Append View Component To Body Element
+    $(".app-root").append(this.template);
+  }
+}
+
+class ResultsView {
+  constructor(results) {
+    this.template = `
+      <!-- Results View Component -->
+        <section class="" id="results">
+          <div class="container">
+            <div class="columns py-6">
+
+              <div class="column"></div>
+              <div class="column"></div>
+            </div>
+          </div>
+      </section>
+    `;
+  }
+  attachEventHandlers() {}
+
+  render(data) {
+    const events = data._embedded.events;
+    // Clear Body Content
+    $(".app-root").empty();
+    // Append View Component To Body Element
+    $(".app-root").append(this.template);
+
+    // Render Event Cards
+    for (const event in events) {
+      console.log(event);
+      const card = new EventCard();
+      const columns = $(".columns py-6");
+      const container = $(".container");
+
+      card.render(
+        events[event].id,
+        events[event].images[0].url,
+        events[event].name,
+        events[event].venueName,
+        events[event].dates.start.localDate,
+        events[event].dates.start.localTime
+      );
+    }
+
+    for (const event in events) {
+      console.log(events[event]);
+    }
+  }
+}
+
+class EvenDetailsView {
+  onInit() {}
+  attachEventHandlers() {}
+
+  render() {}
+}
+
+class EventCard {
+  constructor() {
+    this.id;
+    this.imgUrl;
+    this.name;
+    this.venueName;
+    this.startDate;
+    this.startTime;
+
+    this.template = `
+      <div class="column">
+        <!-- Card Component V2 -->
+        <div class="card is-flex is-flex-direction-column" id="${this.id}">
+          <!-- Card Image Element -->
+          <div class="card-image">
+            <figure class="image">
+              <img
+                src="${this.imgUrl}"
+                alt="Placeholder image"
+              />
+            </figure>
+            <span
+              class="icon has-text-grey-light is-large"
+              style="position: absolute; top: 5%; right: 5%"
+            >
+              <i class="far fa-star fa-2x"></i>
+            </span>
+          </div>
+          <!-- Card Content Flex Wrapper -->
+          <div class="is-flex is-flex-direction-row">
+            <div class="card-content py-3 is-flex-grow-5">
+              <div class="content">
+                <div class="text">
+                  <p
+                    class="is-uppercase is-family-monospace has-text-weight-bold is-size-4 mb-0"
+                  >
+                    ${this.name}
+                  </p>
+                  <!-- Event Venue Element -->
+                  <div class="icon-text mb-0 level">
+                    <div class="level-left">
+                      <span class="icon level-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                      </span>
+                      <span
+                        class="is-size-6 has-text-grey level-item"
+                        id="event-venue"
+                        >${this.venueName}</span
+                      >
+                    </div>
+                  </div>
+                  <!-- Event Time Element -->
+                  <div class="icon-text mb-0 level">
+                    <div class="level-left">
+                      <span class="icon level-item">
+                        <i class="fas fa-clock"></i>
+                      </span>
+                      <time
+                        class="is-size-6 has-text-grey level-item"
+                        id="event-time"
+                        >${this.startTime}</time
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Event Date Block Element -->
+            <div
+              class="card-footer is-flex-direction-column has-background-danger has-text-white px-5 has-text-centered is-justify-content-center"
+              style="border: none"
+            >
+              <h3
+                class="is-size-3 has-text-weight-bold mb-1"
+                style="line-height: 24px"
+              >
+                25
+              </h3>
+              <h3 class="is-size-6 has-text-weight-light is-uppercase">
+                ${this.startDate}
+              </h3>
+            </div>
+          </div>
+        </div>
+        <!-- //Card Component V2 -->
+    </div>
+    `;
+  }
+  attachEventHandlers() {}
+  render(id, imgUrl, name, venueName, startDate, startTime) {
+    this.id = id;
+    this.imgUrl = imgUrl;
+    this.name = name;
+    this.venueName = venueName;
+    this.startDate = startDate;
+    this.startTime = startTime;
+    // Clear Body Content
+    $("#results").empty();
+    // Append View Component To Body Element
+    $("#results").$(".container").append(this.template);
+  }
+}
+
+const app = new App();
