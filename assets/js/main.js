@@ -625,29 +625,10 @@ class EventCard {
       console.log("Event Details button");
       this.app.renderEventDetails(this.event);
     });
-
-    class NavBar {
-      constructor(app) {
-        this.app = app;
-        this.template = `
-      <!-- Navbar Component -->
-      <nav class="level is-mobile" >
-        <div class="button is-rounded">
-          <a class="link is-info" id="homeButton" href="#">Home</a>
-        </div>
-        <div class="level-item">
-          <a class="link is-info">Searchify</a>
-        </div>
-        <div class="button is-rounded">
-          <a class="link is-info" id="savedButton">Saved Events</a>
-        </div>
-      </nav>
-    `;
-      }
-      render() {
-        return this.template;
-      }
-    }
+  }
+  render() {
+    return this.template;
   }
 }
+
 const app = new App();
