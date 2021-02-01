@@ -553,7 +553,7 @@ class EventCard {
         }">
           <!-- Card Image Element -->
           <div class="card-image">
-            <figure class="image">
+            <figure class="image is-16by9">
               <img
                 src="${this.imgUrl}"
                 alt="Placeholder image"
@@ -562,7 +562,7 @@ class EventCard {
 
           </div>
           <!-- Card Content Flex Wrapper -->
-          <div class="is-flex is-flex-direction-row">
+          <div class="is-flex is-flex-direction-row" style="height: 100%;">
             <div class="card-content py-3 is-flex-grow-5">
               <div class="content">
                 <div class="text">

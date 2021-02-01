@@ -77,3 +77,9 @@ img {
   );
   opacity: 0.5;
 }
+
+.card,
+.card-footer,
+.card-content {
+  height: 100%;
+}
