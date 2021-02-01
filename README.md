@@ -43,7 +43,14 @@ The following list of requirements were derived from the project brief and consi
 ---
 
 ## Screenshots of the app:
+Desktop version:
+![alt text](./assets/images/screenshot-1.png)
+![alt text](./assets/images/screenshot-2.png)
 
+
+Mobile version:
+![alt text](./assets/images/screenshot-3.png)
+![alt text](./assets/images/screenshot-4.png)
 
 
 ---
