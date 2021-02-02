@@ -78,8 +78,12 @@ img {
   opacity: 0.5;
 }
 
-.card,
-.card-footer,
+.card.event-card,
+.card-footer.event-card,
+.card-content.event-card {
+  height: 100%;
+}
+
 .card-content {
   height: 100%;
 }
