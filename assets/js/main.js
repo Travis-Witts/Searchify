@@ -181,56 +181,88 @@ class HomeView {
   constructor(app) {
     this.app = app;
     this.template = `
-      <section class="hero is-light is-fullheight search-panel" id="search-component">
-
-        <div class="hero-body is-flex-direction-column is-justify-content-center">
-          <div class="columns is-mobile is-centered">
-            <h1 class="title is-1 has-text-centered">Find out what's happening in your state!</h1>
-          </div>
-          <form class="field" id="search-form">
-            <div class="field">
-              <div class="control columns is-mobile is-centered">
-                <div class="search-bar column is-two-thirds is-half-tablet">
+      <!-- Search Component -->
+      <section
+        class="hero is-light is-fullheight search-panel"
+        id="search-component"
+      >
+        <div class="hero-body">
+          <div class="container has-text-centered">
+            <div class="columns has-text-centered">
+              <div class="column">
+                <h1 class="title is-1 has-text-centered">
+                  Find out what's happening in your state!
+                </h1>
+              </div>
+            </div>
+            <form id="search-form">
+              <div class="columns is-justify-content-center">
+                <!-- Search Input -->
+                <div class="field column is-two-thirds">
                   <div class="control has-icons-left">
                     <input
                       class="input is-rounded is-large"
+                      id="keyword"
                       type="text"
-                      placeholder="Enter a state"
-                      id="keyword" maxlength="3"
+                      placeholder="Enter your state code"
+                      maxlength="3"
                     />
                     <span class="icon is-small is-left">
-                      <i class="fas fa-map-marker-alt"></i>
+                      <svg
+                        class="svg-inline--fa fa-map-marker-alt fa-w-12"
+                        aria-hidden="true"
+                        focusable="false"
+                        data-prefix="fas"
+                        data-icon="map-marker-alt"
+                        role="img"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 384 512"
+                        data-fa-i2svg=""
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"
+                        ></path>
+                      </svg>
                     </span>
                   </div>
                 </div>
               </div>
-            </div>
-            <div
-              class="field is-grouped is-grouped-multiline columns is-mobile is-centered"
-            >
-              <div class="control">
-                <label class="label">Start Date</label>
-                <div class="control">
-                  <input class="input" type="date" id="startDate" />
+              <div class="columns is-justify-content-center">
+                <!-- Date Pickers -->
+                <div
+                  class="field column is-grouped is-grouped-centered is-grouped-multiline"
+                >
+                  <div class="control">
+                    <label for="startDate" class="label">Start Date</label>
+                    <input type="date" class="input" id="startDate" />
+                  </div>
+                  <div class="control">
+                    <label for="endDate" class="label">End Date</label>
+                    <input type="date" class="input" id="endDate" />
+                  </div>
                 </div>
               </div>
-              <div class="control">
-                <label class="label">End Date</label>
-                <div class="control">
-                  <input class="input" type="date" id="endDate" />
+
+              <div class="columns is-justify-content-center mt-5">
+                <!-- Form Button -->
+                <div class="field column is-one-quarter">
+                  <div class="control">
+                    <button
+                      type="submit"
+                      class="button is-rounded is-medium is-fullwidth is-primary"
+                      id="searchButton"
+                    >
+                      <span class="icon">
+                        <i class="fas fa-search"></i>
+                      </span>
+                      <span> Search </span>
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="columns is-mobile is-centered">
-              <button
-                type="submit"
-                class="button is-rounded"
-                id="searchButton"
-              >
-                Search
-              </button>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </section>
     `;
@@ -314,14 +346,9 @@ class EventDetailsView {
       <section class="hero is-primary is-medium has-background" id="artist-banner">
         <img class="hero-background" src="" id="event-banner-image"></img>
         <div class="overlay"></div>
-                    <a class="save-btn">
-              <span
-                class="icon has-text-grey-light is-large"
-                style="position: absolute; top: 5%; right: 5%"
-              >
-                <i class="far fa-star fa-2x"></i>
-              </span>
-            </a>;
+                    <button class="button is-primary save-btn" style="position: absolute; top: 5%; right: 5%;">
+    Save Event
+            </button>;
         <div class="container mx-6">
           <div class="hero-body pl-6" id="hero-text">
             <p class="title is-1 has-text-weight-bold" id="event-title">
@@ -370,6 +397,8 @@ class EventDetailsView {
   attachEventHandlers(event) {
     $(`.save-btn`).on("click", () => {
       this.app.eventService.saveEvent(event);
+      $(".save-btn").prop("disabled", true);
+      $(".save-btn").text("Event Saved");
     });
   }
 
@@ -394,46 +423,49 @@ class EventDetailsView {
     // Set Buy Tickets Button href
     $("#tickets-btn").attr("href", `${event.url}`);
 
-    const columns = '<div class="columns"></div>';
+    let cardCount = 0;
 
     for (const artist in event._embedded.attractions) {
-      console.log(event._embedded.attractions[artist]);
       const artistSearchRes = await this.app.spotifySearchService.fetchArtist(
         event._embedded.attractions[artist].name
       );
 
-      console.log(artistSearchRes.artists[0]);
+      console.log(artistSearchRes);
+
+      const artistsWrapperEl = $("#artists-wrapper");
+      const columns = '<div class="columns"></div>';
 
       const card = `
-        <div class="card">
-          <div class="card-image">
-            <figure class="image is-4by3">
-              <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
-            </figure>
-          </div>
-          <div class="card-content">
-            <div class="media">
-              <div class="media-left">
-                <figure class="image is-48x48">
-                  <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-                </figure>
-              </div>
-              <div class="media-content">
-                <p class="title is-4">John Smith</p>
-                <p class="subtitle is-6">@johnsmith</p>
+            <div class="column is-one-third">
+              <div class="card" id="card-${artistSearchRes.artists.items[0].id}">
+                <div class="card-image">
+                  <figure class="image">
+                    <img
+                      src="${artistSearchRes.artists.items[0].images[0].url}"
+                      alt="${artistSearchRes.artists.items[0].name}"
+                    />
+                  </figure>
+                </div>
+                <div class="card-content">
+                  <div class="content">
+                    <h3 id="artist-name">${artistSearchRes.artists.items[0].name}</h3>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <a href="${artistSearchRes.artists.items[0].external_urls.spotify}" class="card-footer-item">View on Spotify</a>
+                </div>
               </div>
             </div>
-
-            <div class="content">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Phasellus nec iaculis mauris. <a>@bulmaio</a>.
-              <a href="#">#css</a> <a href="#">#responsive</a>
-              <br>
-              <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-            </div>
-          </div>
-      </div>
       `;
+
+      if (cardCount === 0 || cardCount % 3 === 0) {
+        artistsWrapperEl.append(columns);
+        artistsWrapperEl.children().last().append(card);
+        cardCount++;
+      } else {
+        artistsWrapperEl.children().last().append(card);
+        cardCount++;
+      }
     }
   }
 }
@@ -509,15 +541,34 @@ class NavBar {
     this.app = app;
     this.template = `
       <!-- Navbar Component -->
-      <nav class="level is-mobile" >
-        <div class="button is-rounded">
-          <a class="link is-info" id="homeButton" >Home</a>
+      <nav
+        class="navbar is-justify-content-center is-align-content-center"
+        role="navigation"
+        aria-label="main navigation"
+      >
+        <!-- Logo -->
+        <div class="navbar-brand">
+          <a
+            class="navbar-item title has-text-primary has-text-weight-bold"
+            id="homeButton"
+          >
+            Searchify
+          </a>
         </div>
-        <div class="level-item">
-          <h1 class="title link is-info">Searchify</h1>
-        </div>
-        <div class="button is-rounded">
-          <a class="link is-info" id="savedButton">Saved Events</a>
+        <!-- Menu Items -->
+        <div id="app-navbar" class="navbar-menu">
+          <div class="navbar-end">
+            <div class="navbar-item">
+              <div class="buttons">
+                <a class="button is-light" id="savedButton">
+                  <span class="icon">
+                    <i class="fas fa-star"></i>
+                  </span>
+                  <span> Saved Events </span>
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </nav>
     `;
@@ -552,16 +603,15 @@ class EventCard {
     this.startTime = event.dates.start.localTime;
     this.date = new Date(
       this.startDate.substr(0, 4),
-      this.startDate.substr(6, 1) -1,
+      this.startDate.substr(6, 1) - 1,
       this.startDate.substr(8, 2)
     );
-    console.log(this.startDate)
 
     this.template = `
-      <div class="column">
+      <div class="column is-one-third">
         <!-- Card Component V2 -->
        <a id="card-${this.id}">
-        <div class="card tile-is-child is-flex is-flex-direction-column flex-grow-5" id="card-${
+        <div class="card event-card tile-is-child is-flex is-flex-direction-column flex-grow-5" id="card-${
           this.id
         }">
           <!-- Card Image Element -->
@@ -572,7 +622,8 @@ class EventCard {
                 alt="Placeholder image"
               />
             </figure>
-
+            <div class="overlay">
+            </div>
           </div>
           <!-- Card Content Flex Wrapper -->
           <div class="is-flex is-flex-direction-row" style="height: 100%;">
@@ -585,37 +636,37 @@ class EventCard {
                     ${this.name}
                   </p>
                   <!-- Event Venue Element -->
-                  <div class="icon-text mb-0 level">
-                    <div class="level-left">
-                      <span class="icon level-item">
+                  <div class="icon-text mb-0">
+                   
+                      <span class="icon">
                         <i class="fas fa-map-marker-alt"></i>
                       </span>
                       <span
-                        class="is-size-6 has-text-grey level-item"
+                        class="is-size-6 has-text-grey"
                         id="event-venue"
                         >${this.venueName}</span
                       >
-                    </div>
+              
                   </div>
                   <!-- Event Time Element -->
-                  <div class="icon-text mb-0 level">
-                    <div class="level-left">
-                      <span class="icon level-item">
+                  <div class="icon-text mb-0 ">
+                   
+                      <span class="icon">
                         <i class="fas fa-clock"></i>
                       </span>
                       <time
-                        class="is-size-6 has-text-grey level-item"
+                        class="is-size-6 has-text-grey"
                         id="event-time"
                         >${this.startTime}</time
                       >
-                    </div>
+                    
                   </div>
                 </div>
               </div>
             </div>
             <!-- Event Date Block Element -->
             <div
-              class="card-footer is-flex-direction-column has-background-danger has-text-white px-5 has-text-centered is-justify-content-center"
+              class="card-footer is-flex-direction-column has-background-danger has-text-white px-5 has-text-centered is-justify-content-center py-6"
               style="border: none"
             >
               <h3
